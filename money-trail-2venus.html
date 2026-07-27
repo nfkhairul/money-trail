@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money Trail · Form 2 English · SMK RPS Betau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12103A;
+  --ink-2:#241F5C;
+  --paper:#FFF4E0;
+  --paper-2:#FFE9C4;
+  --mint:#17C3A2;
+  --hibiscus:#FF3D71;
+  --gold:#FFC24B;
+  --violet:#7B5CFF;
+  --sky:#35B0F5;
+  --line:#12103A;
+  --shadow:6px 6px 0 var(--ink);
+  --shadow-sm:3px 3px 0 var(--ink);
+  --r:18px;
+  --display:'Baloo 2',system-ui,sans-serif;
+  --body:'Nunito',system-ui,sans-serif;
+  --mono:'Space Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(123,92,255,.35), transparent 42%),
+    radial-gradient(circle at 88% 8%, rgba(23,195,162,.30), transparent 40%),
+    radial-gradient(circle at 70% 92%, rgba(255,61,113,.28), transparent 45%),
+    repeating-radial-gradient(circle at 50% 40%, rgba(255,255,255,.045) 0 2px, transparent 2px 26px),
+    var(--ink);
+  min-height:100vh;
+  padding:0 0 90px;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{font-family:var(--display);line-height:1.08;letter-spacing:-.01em}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:1rem}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+/* ---------- shared bits ---------- */
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.card{
+  background:var(--paper);
+  border:3px solid var(--line);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:22px;
+  position:relative;
+  overflow:hidden;
+}
+.card::after{ /* security thread shimmer — the banknote tell */
+  content:"";position:absolute;top:0;bottom:0;left:26px;width:8px;
+  background:repeating-linear-gradient(180deg,rgba(18,16,58,.16) 0 6px,transparent 6px 14px);
+  opacity:.5;pointer-events:none;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-2);opacity:.75;
+}
+.btn{
+  border:3px solid var(--line);border-radius:999px;background:var(--gold);
+  padding:12px 22px;font-family:var(--display);font-weight:700;font-size:1.02rem;
+  box-shadow:var(--shadow-sm);transition:transform .12s ease, box-shadow .12s ease;
+  color:var(--ink);
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.mint{background:var(--mint)}
+.btn.pink{background:var(--hibiscus);color:#fff}
+.btn.violet{background:var(--violet);color:#fff}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--shadow-sm)}
+.btn.sm{padding:8px 14px;font-size:.9rem;border-width:2px}
+.field{
+  width:100%;padding:13px 15px;border:3px solid var(--line);border-radius:12px;
+  background:#fff;color:var(--ink);
+}
+.field::placeholder{color:#9a95b8}
+label.lbl{display:block;font-weight:700;margin:0 0 6px;font-size:.95rem}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);
+  border-radius:999px;padding:4px 12px;font-size:.8rem;font-weight:700;background:#fff;
+}
+
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('rate')){
+    S.rate=parseFloat(e.target.value);
+    $$('.rate').forEach(r=>{ if(r!==e.target) r.value=e.target.value; });
+  }
+});
+
+/* ---------- login ---------- */
+#login{min-height:100vh;display:grid;place-items:center;padding:28px 16px}
+.login-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:0;max-width:900px;width:100%;
+  border:4px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:10px 10px 0 rgba(0,0,0,.45)}
+.login-hero{
+  background:
+    repeating-linear-gradient(135deg,rgba(255,255,255,.10) 0 10px,transparent 10px 20px),
+    linear-gradient(160deg,var(--mint),var(--sky) 55%,var(--violet));
+  color:#fff;padding:34px 30px;position:relative;
+}
+.login-hero h1{font-size:clamp(2.3rem,5.4vw,3.4rem);text-shadow:3px 3px 0 rgba(18,16,58,.55)}
+.login-hero p{margin-top:12px;font-weight:600;max-width:34ch;text-shadow:1px 1px 0 rgba(18,16,58,.3)}
+.coinrow{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.coin{
+  width:52px;height:52px;border-radius:50%;border:3px solid var(--ink);background:var(--gold);
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--ink);
+  box-shadow:var(--shadow-sm);animation:bob 2.6s ease-in-out infinite;
+}
+.coin:nth-child(2){animation-delay:.2s;background:#fff}
+.coin:nth-child(3){animation-delay:.4s;background:var(--hibiscus);color:#fff}
+.coin:nth-child(4){animation-delay:.6s;background:var(--paper)}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-9px) rotate(4deg)}}
+.login-form{background:var(--paper);padding:32px 30px}
+.login-form h2{font-size:1.5rem;margin-bottom:4px}
+.login-form .sub{font-size:.9rem;opacity:.75;margin-bottom:18px}
+.login-form .row{margin-bottom:14px}
+.err{color:var(--hibiscus);font-weight:700;font-size:.88rem;margin-top:8px;display:none}
+.note{font-size:.78rem;opacity:.7;margin-top:14px;line-height:1.5}
+
+/* ---------- header / wallet ---------- */
+header.top{position:sticky;top:0;z-index:40;padding:10px 0 0;background:linear-gradient(180deg,rgba(18,16,58,.96),rgba(18,16,58,.72) 78%,transparent)}
+.note-strip{
+  background:var(--paper);border:3px solid var(--line);border-radius:14px;
+  display:flex;align-items:center;gap:14px;padding:10px 16px;box-shadow:var(--shadow-sm);
+  --serr:radial-gradient(circle at 6px 6px, transparent 5px, var(--paper) 5px);
+}
+.avatar{
+  width:44px;height:44px;border-radius:12px;border:3px solid var(--line);background:var(--violet);
+  color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:800;flex:none;
+}
+.who{line-height:1.15;min-width:0}
+.who b{font-family:var(--display);font-size:1.02rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:34vw}
+.who span{font-size:.72rem;font-family:var(--mono);opacity:.7}
+.wallet{margin-left:auto;text-align:right;flex:none}
+.wallet .amt{font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1}
+.wallet .amt.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.28) rotate(-3deg);color:var(--mint)}100%{transform:scale(1)}}
+.wallet small{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+
+/* trail */
+.trail{display:flex;gap:6px;overflow-x:auto;padding:12px 2px 10px;scrollbar-width:none}
+.trail::-webkit-scrollbar{display:none}
+.stop{
+  flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--line);
+  background:var(--paper);font-family:var(--display);font-weight:800;font-size:.95rem;
+  display:grid;place-items:center;color:var(--ink);position:relative;
+}
+.stop.active{background:var(--gold);transform:scale(1.14);box-shadow:0 0 0 4px rgba(255,194,75,.35)}
+.stop.done{background:var(--mint)}
+.stop.done::before{content:"✓";font-size:1rem}
+.stop.done span{display:none}
+
+/* ---------- stages ---------- */
+main{padding-top:8px}
+.stage{display:none;animation:slidein .35s ease}
+.stage.on{display:block}
+@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.stage-head{color:#fff;margin:14px 2px 12px}
+.stage-head .kicker{
+  display:inline-block;background:var(--hibiscus);color:#fff;border:3px solid var(--line);
+  border-radius:999px;padding:3px 14px;font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.14em;text-transform:uppercase;box-shadow:var(--shadow-sm);
+}
+.stage-head h2{font-size:clamp(1.7rem,4.6vw,2.5rem);margin-top:10px;text-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.stage-head p{opacity:.9;margin-top:6px;font-weight:600;max-width:62ch}
+.objective{
+  background:var(--paper-2);border:3px dashed var(--line);border-radius:14px;padding:12px 16px;
+  font-weight:700;font-size:.92rem;margin-bottom:16px;
+}
+.card + .card{margin-top:16px}
+.nav-row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin:18px 2px 0;flex-wrap:wrap}
+
+/* audio player */
+.player{
+  background:var(--ink);color:var(--paper);border:3px solid var(--line);border-radius:16px;
+  padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--shadow-sm);
+}
+.disc{
+  width:46px;height:46px;border-radius:50%;flex:none;
+  background:conic-gradient(from 0deg,#fff,var(--sky),var(--violet),var(--hibiscus),#fff);
+  border:3px solid var(--paper);position:relative;
+}
+.disc::after{content:"";position:absolute;inset:38%;border-radius:50%;background:var(--ink);border:2px solid var(--paper)}
+.disc.spin{animation:spin 1.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.player .ttl{font-family:var(--display);font-weight:700;font-size:1.02rem}
+.player .ttl small{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;opacity:.7;text-transform:uppercase}
+.player .ctrls{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.speed{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.72rem}
+.speed input{width:88px}
+.transcript{
+  margin-top:12px;background:#fff;border:3px solid var(--line);border-radius:12px;padding:14px 16px;
+  font-size:.94rem;line-height:1.65;display:none;
+}
+.transcript.on{display:block}
+.transcript b{color:var(--violet)}
+.speaking{background:var(--gold);border-radius:4px;padding:0 3px}
+
+/* word pool */
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.wordchip{
+  border:3px solid var(--line);border-radius:14px;background:#fff;padding:10px 16px;
+  font-family:var(--display);font-weight:700;font-size:1.05rem;box-shadow:var(--shadow-sm);
+  transition:transform .12s ease;
+}
+.wordchip:hover{transform:translateY(-3px)}
+.wordchip.said{background:var(--mint)}
+.wordchip.star{background:var(--gold)}
+.wordchip.used{opacity:.35;pointer-events:none}
+.wordchip.picked{background:var(--violet);color:#fff;transform:translateY(-3px)}
+
+/* match game */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.match h4{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;opacity:.7}
+.mitem{
+  display:block;width:100%;text-align:left;border:3px solid var(--line);border-radius:12px;background:#fff;
+  padding:10px 12px;margin-bottom:8px;font-weight:700;font-size:.95rem;box-shadow:var(--shadow-sm);
+}
+.mitem.sel{background:var(--violet);color:#fff}
+.mitem.ok{background:var(--mint);pointer-events:none}
+.mitem.bad{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+/* gap fill */
+.gaptext{font-size:1.06rem;line-height:2.5;margin-top:6px}
+.blank{
+  display:inline-block;min-width:104px;border:none;border-bottom:4px solid var(--violet);
+  background:var(--paper-2);padding:2px 10px;font-family:var(--display);font-weight:700;
+  font-size:1rem;border-radius:8px 8px 0 0;color:var(--ink-2);
+}
+.blank.sel{background:var(--gold);box-shadow:0 0 0 3px rgba(255,194,75,.5)}
+.blank.ok{background:var(--mint);border-bottom-color:var(--ink)}
+.blank.no{background:#ffd0d9;border-bottom-color:var(--hibiscus)}
+
+/* mcq sentences */
+.sent{border-bottom:2px dashed rgba(18,16,58,.25);padding:14px 0;font-size:1.04rem;line-height:1.9}
+.sent:last-child{border-bottom:none}
+.sent .num{
+  display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.78rem;margin-right:8px;
+  vertical-align:middle;
+}
+.opt{
+  border:3px solid var(--line);border-radius:10px;background:#fff;padding:4px 12px;margin:0 4px;
+  font-family:var(--display);font-weight:700;font-size:.98rem;box-shadow:2px 2px 0 var(--ink);
+}
+.opt.chosen{background:var(--violet);color:#fff}
+.opt.ok{background:var(--mint);color:var(--ink)}
+.opt.no{background:var(--hibiscus);color:#fff}
+.tip{
+  margin-top:12px;background:var(--paper-2);border-left:8px solid var(--gold);border-radius:8px;
+  padding:10px 14px;font-weight:700;font-size:.92rem;display:none;
+}
+.tip.on{display:block}
+
+/* wall of ideas */
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:14px}
+.sticky{
+  border:3px solid var(--line);border-radius:12px;padding:12px;font-weight:700;font-size:.92rem;
+  box-shadow:var(--shadow-sm);transform:rotate(-1.2deg);
+}
+.sticky:nth-child(2n){transform:rotate(1.4deg)}
+.sticky small{display:block;font-family:var(--mono);font-size:.66rem;opacity:.7;margin-top:6px}
+
+/* receipt */
+.receipt{
+  background:#fff;border:3px solid var(--line);border-radius:6px;padding:18px;font-family:var(--mono);
+  font-size:.88rem;line-height:1.9;max-width:420px;margin:14px auto 0;
+  box-shadow:var(--shadow);position:relative;
+}
+.receipt::before,.receipt::after{
+  content:"";position:absolute;left:-3px;right:-3px;height:10px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 12px);
+}
+.receipt::before{top:-3px}.receipt::after{bottom:-3px}
+.receipt h4{font-family:var(--display);text-align:center;font-size:1.2rem;margin-bottom:6px}
+.receipt .li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed #bbb}
+.receipt .why{font-size:.78rem;opacity:.8;padding:2px 0 8px}
+
+/* score / reflection */
+.scorebig{font-family:var(--display);font-size:3.6rem;line-height:1;text-align:center}
+.bar{height:22px;border:3px solid var(--line);border-radius:999px;background:#fff;overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:var(--mint);width:0;transition:width .9s ease}
+.badge{
+  width:132px;height:132px;margin:0 auto;border-radius:50%;border:5px solid var(--line);
+  background:radial-gradient(circle at 34% 28%,#fff,var(--gold) 62%);
+  display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:800;
+  box-shadow:var(--shadow);line-height:1.1;padding:10px;
+}
+
+/* toast + coins */
+#toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,140%);z-index:90;
+  background:var(--ink);color:var(--paper);border:3px solid var(--paper);border-radius:999px;
+  padding:12px 22px;font-family:var(--display);font-weight:700;transition:transform .35s cubic-bezier(.2,1.4,.4,1);
+  max-width:90vw;text-align:center;
+}
+#toast.on{transform:translate(-50%,0)}
+.fx{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
+.fxcoin{position:absolute;font-size:24px;animation:fall 1.5s ease-in forwards}
+@keyframes fall{0%{transform:translateY(-10vh) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(540deg);opacity:0}}
+
+@media (max-width:760px){
+  .login-grid{grid-template-columns:1fr}
+  .match{grid-template-columns:1fr}
+  .who b{max-width:44vw}
+  .card{padding:18px 16px}
+  .gaptext{line-height:2.7}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+@media print{
+  body{background:#fff;padding:0}
+  header.top,.nav-row,.player,#toast,.trail{display:none!important}
+  .card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<section id="login">
+  <div class="login-grid">
+    <div class="login-hero">
+      <div class="eyebrow" style="color:#fff;opacity:.85">Form 2 · English · Module 6</div>
+      <h1>The Money<br>Trail</h1>
+      <p>Ten stops. One wallet. Listen carefully, earn ringgit, and find out who really knows how to handle money.</p>
+      <div class="coinrow">
+        <div class="coin">RM</div><div class="coin">1</div><div class="coin">5</div><div class="coin">10</div>
+      </div>
+      <p style="margin-top:22px;font-size:.82rem;opacity:.9">SMK RPS Betau K11 · Kuala Lipis, Pahang</p>
+    </div>
+
+    <div class="login-form">
+      <h2>Sign in with DELIMa</h2>
+      <div class="sub">Use the Google email your school gave you.</div>
+
+      <div class="row">
+        <label class="lbl" for="in-email">DELIMa ID (Google email)</label>
+        <input class="field" id="in-email" type="email" inputmode="email" autocomplete="email"
+               placeholder="ali.bin.ahmad@moe-dl.edu.my">
+      </div>
+      <div class="row">
+        <label class="lbl" for="in-name">Your name</label>
+        <input class="field" id="in-name" type="text" autocomplete="name" placeholder="Ali bin Ahmad">
+      </div>
+      <div class="row">
+        <label class="lbl" for="in-class">Class</label>
+        <select class="field" id="in-class">
+          <option>2 VENUS</option><option>4 MARS</option><option>4 JUPITER</option><option>Other</option>
+        </select>
+      </div>
+      <button class="btn mint" id="go-login" style="width:100%">Start the trail</button>
+      <div class="err" id="login-err"></div>
+      <p class="note">Your answers stay on this device only. Nothing is sent anywhere, and nothing is saved after you close the page.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APP ===================== -->
+<div id="app" hidden>
+<header class="top">
+  <div class="wrap">
+    <div class="note-strip">
+      <div class="avatar" id="av">?</div>
+      <div class="who"><b id="who-name">—</b><span id="who-id">—</span></div>
+      <div class="wallet"><div class="amt" id="amt">RM 0</div><small>My wallet</small></div>
+    </div>
+    <nav class="trail" id="trail" aria-label="Lesson stops"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 1 PRE-LESSON -->
+  <section class="stage" data-s="1">
+    <div class="stage-head">
+      <span class="kicker">Pre-lesson · Stop 1</span>
+      <h2>Where does your money go?</h2>
+      <p>Work in pairs. Write the three things you spend the most money on each week, then report what your partner said.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Talk first, then type</div>
+      <h3 style="font-size:1.3rem;margin:6px 0 12px">SPEND MONEY</h3>
+      <p style="font-weight:600;margin-bottom:14px">Ask your partner: <i>“What do you spend most money on each week?”</i></p>
+      <div class="row" style="margin-bottom:10px">
+        <label class="lbl" for="p1">1. I spend most money on…</label>
+        <input class="field" id="p1" placeholder="e.g. bubble tea">
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <label class="lbl" for="p2">2. I also spend money on…</label>
+        <input class="field" id="p2" placeholder="e.g. phone data">
+      </div>
+      <div class="row" style="margin-bottom:14px">
+        <label class="lbl" for="p3">3. And on…</label>
+        <input class="field" id="p3" placeholder="e.g. football boots">
+      </div>
+      <div class="row" style="margin-bottom:14px">
+        <label class="lbl" for="pp">Now report back: what does your partner spend money on?</label>
+        <input class="field" id="pp" placeholder="e.g. Sara spends a lot of money on DVDs.">
+      </div>
+      <button class="btn" id="post-wall">Pin it on the class wall</button>
+      <div class="wall" id="wall"></div>
+    </div>
+    <div class="nav-row"><span></span><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 2 WORD POOL -->
+  <section class="stage" data-s="2">
+    <div class="stage-head">
+      <span class="kicker">Lesson development · Stop 2</span>
+      <h2>Listen and repeat</h2>
+      <p>Tap each word to hear it. Say it out loud after the recording. Watch out for <b>earn</b> — it rhymes with <i>turn</i>, not <i>ear</i>.</p>
+    </div>
+    <div class="card">
+      <div class="player">
+        <div class="disc" id="d2"></div>
+        <div class="ttl">Word pool<small>Track 1 · 10 words</small></div>
+        <div class="ctrls">
+          <button class="btn sm mint" data-play="pool">▶ Play all</button>
+          <button class="btn sm ghost" data-stop>■ Stop</button>
+          <div class="speed"><label for="rate">SPEED</label><input id="rate" class="rate" type="range" min="0.6" max="1.2" step="0.1" value="0.9"></div>
+        </div>
+      </div>
+      <div class="pool" id="pool"></div>
+      <p style="margin-top:14px;font-weight:700;font-size:.9rem;opacity:.8">Tapped: <span id="poolcount">0</span> / 10 words</p>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 3 MEANING -->
+  <section class="stage" data-s="3">
+    <div class="stage-head">
+      <span class="kicker">Lesson development · Stop 3</span>
+      <h2>What does it mean?</h2>
+      <p>Match each English word with its meaning in Bahasa Melayu. Tap one word, then tap its meaning.</p>
+    </div>
+    <div class="card">
+      <div class="match">
+        <div><h4>English</h4><div id="mL"></div></div>
+        <div><h4>Maksud</h4><div id="mR"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Careful with these two</div>
+      <h3 style="font-size:1.25rem;margin:6px 0 12px">When you <u>lend</u> money, what happens?</h3>
+      <div id="lendq"></div>
+      <div class="tip" id="lendtip">When you <b>lend</b> money, you give it to another person. When you <b>borrow</b> money, you take it from another person.</div>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 4 GAP FILL -->
+  <section class="stage" data-s="4">
+    <div class="stage-head">
+      <span class="kicker">Learning objective 1 · Stop 4</span>
+      <h2>Fill the ten gaps</h2>
+      <p>Work on your own first. Tap a gap, then tap the word that fits. Compare with your partner before you check.</p>
+    </div>
+    <div class="objective">🎯 Complete the text with 10 words from the audio script.</div>
+    <div class="card">
+      <div class="eyebrow">Clare’s story · exercise 2</div>
+      <div class="player" style="margin:10px 0 16px">
+        <div class="disc" id="d4"></div>
+        <div class="ttl">Clare’s story<small>Track 2 · listen, then fill the gaps</small></div>
+        <div class="ctrls">
+          <button class="btn sm mint" data-play="clare">▶ Play</button>
+          <button class="btn sm ghost" data-stop>■ Stop</button>
+          <div class="speed"><label for="rate4">SPEED</label><input id="rate4" class="rate" type="range" min="0.6" max="1.2" step="0.1" value="0.9"></div>
+        </div>
+      </div>
+      <p style="font-weight:700;font-size:.92rem;margin-bottom:12px">Play it once and just listen. Play it again and tap the words into the gaps — you can pause and replay as many times as you need.</p>
+      <div class="pool" id="bank" style="margin:10px 0 18px"></div>
+      <div class="gaptext" id="gaptext"></div>
+      <div class="nav-row" style="margin-top:18px">
+        <button class="btn sm ghost" id="clear-gaps">Clear all</button>
+        <button class="btn mint" id="check-gaps">Check my answers</button>
+      </div>
+      <p style="margin-top:12px;font-weight:700" id="gapscore"></p>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 5 LISTEN AND CHECK -->
+  <section class="stage" data-s="5">
+    <div class="stage-head">
+      <span class="kicker">Lesson development · Stop 5</span>
+      <h2>Listen and check</h2>
+      <p>Play the recording and check the answers you wrote at stop 4. Then answer the question below as a class.</p>
+    </div>
+    <div class="card">
+      <div class="player">
+        <div class="disc" id="d5"></div>
+        <div class="ttl">Clare’s story<small>Track 2 · 0:55</small></div>
+        <div class="ctrls">
+          <button class="btn sm mint" data-play="clare">▶ Play</button>
+          <button class="btn sm ghost" data-stop>■ Stop</button>
+          <button class="btn sm ghost" data-transcript="tr-clare">Show script</button>
+        </div>
+      </div>
+      <div class="transcript" id="tr-clare"></div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:1.25rem;margin-bottom:12px">Who prefers to spend money?</h3>
+      <div id="clareq"></div>
+      <div class="tip" id="claretip">Clare spends almost everything she earns. Danny saves his money for a bicycle.</div>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 6 THINK AND COMPARE -->
+  <section class="stage" data-s="6">
+    <div class="stage-head">
+      <span class="kicker">Lesson development · Stop 6</span>
+      <h2>Now think about you</h2>
+      <p>Read the questions carefully. Think on your own, write your answers, then compare with your partner.</p>
+    </div>
+    <div class="card" id="think"></div>
+    <div class="card">
+      <div class="eyebrow">Pair work</div>
+      <p style="font-weight:700;margin-top:6px">Read your answers to your partner. Find <b>one thing that is the same</b> and <b>one thing that is different</b>.</p>
+      <div class="row" style="margin-top:12px">
+        <label class="lbl" for="same">The same:</label>
+        <input class="field" id="same" placeholder="We both save money for…">
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label class="lbl" for="diff">Different:</label>
+        <input class="field" id="diff" placeholder="I spend money on… but he/she…">
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 7 INTERVIEW -->
+  <section class="stage" data-s="7">
+    <div class="stage-head">
+      <span class="kicker">Lesson development · Stop 7</span>
+      <h2>The interview</h2>
+      <p>Listen once. Note down the answer to one question only. Don’t worry about the other details yet.</p>
+    </div>
+    <div class="card">
+      <div class="objective" style="margin:0 0 14px">❓ Listen and note down: <b>What is Aiman saving for?</b></div>
+      <div class="player">
+        <div class="disc" id="d7"></div>
+        <div class="ttl">Interview with Aiman<small>Track 3 · two speakers</small></div>
+        <div class="ctrls">
+          <button class="btn sm mint" data-play="interview">▶ Play</button>
+          <button class="btn sm ghost" data-stop>■ Stop</button>
+          <button class="btn sm ghost" data-transcript="tr-int">Show script</button>
+        </div>
+      </div>
+      <div class="transcript" id="tr-int"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <input class="field" id="noteans" placeholder="He is saving for…" style="flex:1;min-width:200px">
+        <button class="btn mint" id="check-note">Check</button>
+      </div>
+      <p style="margin-top:10px;font-weight:700" id="notefb"></p>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 8 SIX SENTENCES -->
+  <section class="stage" data-s="8">
+    <div class="stage-head">
+      <span class="kicker">Learning objective 2 · Stop 8</span>
+      <h2>Choose the correct word</h2>
+      <p>Read the six sentences first. Then play the interview again and choose the correct word in each one.</p>
+    </div>
+    <div class="objective">🎯 Choose the correct words for six sentences using the information from the interview.</div>
+    <div class="card">
+      <div class="player">
+        <div class="disc" id="d8"></div>
+        <div class="ttl">Interview with Aiman<small>Track 3 · play again</small></div>
+        <div class="ctrls">
+          <button class="btn sm mint" data-play="interview">▶ Play again</button>
+          <button class="btn sm ghost" data-stop>■ Stop</button>
+        </div>
+      </div>
+      <div id="six" style="margin-top:10px"></div>
+      <div class="nav-row" style="margin-top:14px">
+        <span style="font-weight:700" id="sixscore"></span>
+        <button class="btn mint" id="check-six">Check my answers</button>
+      </div>
+      <div class="tip" id="sixtip">Language point: another word for <b>used</b> is <b>second-hand</b>. A second-hand guitar is not new — somebody owned it before.</div>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">Next stop →</button></div>
+  </section>
+
+  <!-- 9 POST LESSON -->
+  <section class="stage" data-s="9">
+    <div class="stage-head">
+      <span class="kicker">Post-lesson · Stop 9</span>
+      <h2>The two most expensive things you ever bought</h2>
+      <p>Write them down with the price and the reason. Your teacher will ask some of you to describe them to the class.</p>
+    </div>
+    <div class="card">
+      <div id="buys"></div>
+      <button class="btn" id="make-receipt">Print my receipt</button>
+      <div id="receipt-out"></div>
+    </div>
+    <div class="nav-row"><button class="btn ghost prev">← Back</button><button class="btn violet next">See my results →</button></div>
+  </section>
+
+  <!-- 10 REFLECTION -->
+  <section class="stage" data-s="10">
+    <div class="stage-head">
+      <span class="kicker">Reflection · Stop 10</span>
+      <h2>How did you do?</h2>
+    </div>
+    <div class="card">
+      <div class="badge" id="badge">…</div>
+      <div class="scorebig" id="finalamt" style="margin-top:14px">RM 0</div>
+      <p style="text-align:center;font-weight:700;opacity:.75;margin-bottom:20px">earned on the Money Trail</p>
+
+      <div class="eyebrow">Objective 1 · complete the text with 10 words</div>
+      <div class="bar"><i id="b1"></i></div>
+      <div class="eyebrow">Objective 2 · choose the correct words for six sentences</div>
+      <div class="bar"><i id="b2"></i></div>
+
+      <div class="row" style="margin-top:8px">
+        <label class="lbl" for="refl">One new word I will use this week, and how I will use it:</label>
+        <textarea class="field" id="refl" rows="3" placeholder="I will use the word 'afford'. I can't afford a new phone, so I will save RM10 every week."></textarea>
+      </div>
+      <div class="nav-row">
+        <button class="btn ghost prev">← Back</button>
+        <button class="btn mint" onclick="window.print()">Print / save my page</button>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<div id="toast"></div>
+<div class="fx" id="fx"></div>
+
+<script>
+/* ============================================================
+   THE MONEY TRAIL — Form 2 English, Module 6: Money
+   Listening skills 1.1.2 + 1.2.1
+   ============================================================ */
+
+const S = {
+  student:{name:'',email:'',cls:''},
+  wallet:0, stage:1, done:new Set(), rate:0.9,
+  gapScore:0, sixScore:0
+};
+
+/* ---------- content ---------- */
+const POOL = [
+  {w:'earn',      my:'memperoleh wang hasil kerja'},
+  {w:'spend',     my:'membelanjakan wang'},
+  {w:'save',      my:'menyimpan wang'},
+  {w:'lend',      my:'meminjamkan (beri kepada orang lain)'},
+  {w:'borrow',    my:'meminjam (ambil daripada orang lain)'},
+  {w:'afford',    my:'mampu membeli'},
+  {w:'cost',      my:'berharga / harganya'},
+  {w:'waste',     my:'membazir'},
+  {w:'owe',       my:'berhutang kepada seseorang'},
+  {w:'pay back',  my:'membayar balik'}
+];
+
+const CLARE = [
+  "Hi, I’m Clare. My brother Danny and I are very different when it comes to money. I ",
+  {a:'earn'}, " about RM60 every Saturday at my uncle’s café. I love shopping, so I ",
+  {a:'spend'}, " almost all of it on clothes and bubble tea. Danny is the opposite. He puts his money in the bank because he wants to ",
+  {a:'save'}, " for a new bicycle. He says a good bicycle can ",
+  {a:'cost'}, " more than RM800, so he can’t ",
+  {a:'afford'}, " one yet. Last month I asked Danny to ",
+  {a:'lend'}, " me RM50 for a concert ticket. He said yes, but I still ",
+  {a:'owe'}, " him the money! I promised to ",
+  {a:'pay back'}, " every ringgit next week. Mum says I ",
+  {a:'waste'}, " my money on things I don’t need. Maybe she is right — I always have to ",
+  {a:'borrow'}, " money before the end of the month."
+];
+const CLARE_AUDIO = [
+  "Hi, I’m Clare. My brother Danny and I are very different when it comes to money.",
+  "I earn about sixty ringgit every Saturday at my uncle’s café. I love shopping, so I spend almost all of it on clothes and bubble tea.",
+  "Danny is the opposite. He puts his money in the bank because he wants to save for a new bicycle.",
+  "He says a good bicycle can cost more than eight hundred ringgit, so he can’t afford one yet.",
+  "Last month I asked Danny to lend me fifty ringgit for a concert ticket. He said yes, but I still owe him the money!",
+  "I promised to pay back every ringgit next week.",
+  "Mum says I waste my money on things I don’t need. Maybe she is right — I always have to borrow money before the end of the month."
+];
+
+const INTERVIEW = [
+  {v:0,t:"Good morning, Aiman. Thank you for talking to us about money."},
+  {v:1,t:"No problem."},
+  {v:0,t:"Do you get pocket money from your parents?"},
+  {v:1,t:"Yes. My mother gives me fifteen ringgit every week. But it isn’t enough, so I help my uncle at his stall on Sundays and he pays me thirty ringgit."},
+  {v:0,t:"That’s good. What do you do with the money?"},
+  {v:1,t:"I put half of it in an old tin under my bed. I’m saving for a guitar."},
+  {v:0,t:"A new guitar?"},
+  {v:1,t:"No, a used one. A new guitar costs about nine hundred ringgit and I can’t afford that. A second-hand guitar costs around three hundred and fifty."},
+  {v:0,t:"How much have you saved?"},
+  {v:1,t:"About two hundred ringgit. I think I will have enough by December."},
+  {v:0,t:"Do you ever borrow money from your friends?"},
+  {v:1,t:"Never. My father says if you borrow money, you must pay it back the same week. I don’t like owing people money."},
+  {v:0,t:"Do you waste money on anything?"},
+  {v:1,t:"Yes — bubble tea! I buy one almost every day. That’s about seven ringgit a time. I know I should stop."},
+  {v:0,t:"Thank you, Aiman."}
+];
+
+const SIX = [
+  {a:"Aiman’s mother gives him ", o:["RM15","RM30"], k:0, b:" every week."},
+  {a:"He helps at his uncle’s stall on ", o:["Saturdays","Sundays"], k:1, b:"."},
+  {a:"He keeps half of his money in a ", o:["bank","tin"], k:1, b:" under his bed."},
+  {a:"He wants to buy a ", o:["new","used"], k:1, b:" guitar."},
+  {a:"He ", o:["never","sometimes"], k:0, b:" borrows money from his friends."},
+  {a:"He thinks he wastes money on ", o:["bubble tea","guitar lessons"], k:0, b:"."}
+];
+
+const THINK = [
+  "Do you save money, or do you spend it all? Why?",
+  "What is the one thing you really want to buy but cannot afford yet?",
+  "Have you ever lent money to a friend? Did they pay you back?"
+];
+
+/* ---------- helpers ---------- */
+const $ = s=>document.querySelector(s);
+const $$ = s=>[...document.querySelectorAll(s)];
+const shuffle = a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+
+function toast(msg){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(t._x); t._x=setTimeout(()=>t.classList.remove('on'),2600);
+}
+function coinRain(n){
+  const fx=$('#fx');
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div');
+    c.className='fxcoin'; c.textContent=['🪙','💰','💵','🟡'][i%4];
+    c.style.left=(Math.random()*96)+'%';
+    c.style.animationDelay=(Math.random()*.5)+'s';
+    fx.appendChild(c); setTimeout(()=>c.remove(),2200);
+  }
+}
+function award(n,msg){
+  S.wallet+=n;
+  const a=$('#amt'); a.textContent='RM '+S.wallet;
+  a.classList.remove('pop'); void a.offsetWidth; a.classList.add('pop');
+  coinRain(Math.min(14,n));
+  if(msg) toast(msg+'  +RM'+n);
+}
+
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('rate')){
+    S.rate=parseFloat(e.target.value);
+    $$('.rate').forEach(r=>{ if(r!==e.target) r.value=e.target.value; });
+  }
+});
+
+/* ---------- login ---------- */
+$('#go-login').addEventListener('click',()=>{
+  const email=$('#in-email').value.trim().toLowerCase();
+  const name=$('#in-name').value.trim();
+  const err=$('#login-err');
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  if(!ok){ err.textContent='That doesn’t look like an email address. Type your full DELIMa ID, ending in @moe-dl.edu.my.'; err.style.display='block'; return; }
+  if(name.length<2){ err.textContent='Type your name so your teacher knows whose work this is.'; err.style.display='block'; return; }
+  err.style.display='none';
+  S.student={name,email,cls:$('#in-class').value};
+  $('#login').style.display='none';
+  $('#app').hidden=false;
+  $('#who-name').textContent=name;
+  $('#who-id').textContent=email+' · '+S.student.cls;
+  $('#av').textContent=name.trim()[0].toUpperCase();
+  if(!email.endsWith('moe-dl.edu.my')) toast('Signed in. Check your DELIMa ID with your teacher — it usually ends in @moe-dl.edu.my');
+  else toast('Selamat datang, '+name.split(' ')[0]+'!');
+  buildAll(); go(1);
+});
+$('#in-email').addEventListener('keydown',e=>{if(e.key==='Enter')$('#in-name').focus()});
+$('#in-name').addEventListener('keydown',e=>{if(e.key==='Enter')$('#go-login').click()});
+
+/* ---------- navigation ---------- */
+function buildTrail(){
+  const t=$('#trail'); t.innerHTML='';
+  for(let i=1;i<=10;i++){
+    const b=document.createElement('button');
+    b.className='stop'; b.innerHTML='<span>'+i+'</span>';
+    b.setAttribute('aria-label','Stop '+i);
+    b.onclick=()=>go(i);
+    t.appendChild(b);
+  }
+}
+function go(n){
+  S.stage=n;
+  $$('.stage').forEach(el=>el.classList.toggle('on',+el.dataset.s===n));
+  $$('#trail .stop').forEach((b,i)=>{
+    b.classList.toggle('active',i+1===n);
+    b.classList.toggle('done',S.done.has(i+1));
+  });
+  stopAudio();
+  if(n===10) showResults();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function complete(n){ S.done.add(n); const b=$$('#trail .stop')[n-1]; if(b) b.classList.add('done'); }
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('next')){ complete(S.stage); go(Math.min(10,S.stage+1)); }
+  if(e.target.classList.contains('prev')) go(Math.max(1,S.stage-1));
+});
+
+/* ---------- audio (the "CD") ---------- */
+let voices=[];
+function loadVoices(){ voices=speechSynthesis.getVoices(); }
+loadVoices(); speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  return voices.find(v=>/en-GB/i.test(v.lang)) || voices.find(v=>/^en/i.test(v.lang)) || voices[0];
+}
+let currentDisc=null;
+function stopAudio(){
+  speechSynthesis.cancel();
+  $$('.disc').forEach(d=>d.classList.remove('spin'));
+  $$('.transcript p').forEach(p=>p.classList.remove('speaking'));
+  currentDisc=null;
+}
+function speak(lines,discSel,transSel){
+  stopAudio();
+  const disc=(typeof discSel==='string')?$(discSel):discSel; if(disc) disc.classList.add('spin');
+  const rate=S.rate;
+  lines.forEach((ln,i)=>{
+    const u=new SpeechSynthesisUtterance(typeof ln==='string'?ln:ln.t);
+    const v=pickVoice(); if(v) u.voice=v;
+    u.lang='en-GB'; u.rate=rate;
+    u.pitch = (typeof ln==='object' && ln.v===1) ? 1.25 : 0.95;
+    u.onstart=()=>{ if(transSel){ const p=$(transSel+' [data-l="'+i+'"]'); if(p){p.classList.add('speaking'); p.scrollIntoView({block:'nearest'});} } };
+    u.onend=()=>{ if(transSel){ const p=$(transSel+' [data-l="'+i+'"]'); if(p)p.classList.remove('speaking'); }
+                  if(i===lines.length-1 && disc) disc.classList.remove('spin'); };
+    speechSynthesis.speak(u);
+  });
+  if(!('speechSynthesis' in window)) toast('This browser cannot play the audio. Use the script instead.');
+}
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-play]');
+  if(p){
+    const k=p.dataset.play;
+    const disc=p.closest('.player')?.querySelector('.disc');
+    if(k==='pool') speak(POOL.map(x=>x.w),disc);
+    if(k==='clare') speak(CLARE_AUDIO,disc,S.stage===5?'#tr-clare':null);
+    if(k==='interview') speak(INTERVIEW,disc,S.stage===8?null:'#tr-int');
+  }
+  if(e.target.closest('[data-stop]')) stopAudio();
+  const tb=e.target.closest('[data-transcript]');
+  if(tb){ const el=$('#'+tb.dataset.transcript); el.classList.toggle('on');
+          tb.textContent=el.classList.contains('on')?'Hide script':'Show script'; }
+});
+
+/* ---------- stop 1: class wall ---------- */
+const WALL_SEED = [
+  {w:'Sara spends a lot of money on DVDs.', by:'Class example'},
+  {w:'David buys a lot of clothes.', by:'Class example'}
+];
+function buildWall(){
+  const wall=$('#wall'); wall.innerHTML='';
+  const colors=['var(--gold)','var(--mint)','var(--sky)','var(--paper-2)','var(--hibiscus)'];
+  WALL_SEED.forEach((n,i)=>{
+    const d=document.createElement('div');
+    d.className='sticky'; d.style.background=colors[i%colors.length];
+    if(colors[i%colors.length]==='var(--hibiscus)') d.style.color='#fff';
+    d.innerHTML=n.w.replace(/</g,'&lt;')+'<small>'+n.by.replace(/</g,'&lt;')+'</small>';
+    wall.appendChild(d);
+  });
+}
+$('#post-wall').addEventListener('click',()=>{
+  const mine=[$('#p1').value,$('#p2').value,$('#p3').value].filter(v=>v.trim());
+  const partner=$('#pp').value.trim();
+  if(!mine.length && !partner){ toast('Write at least one thing you spend money on.'); return; }
+  if(mine.length) WALL_SEED.push({w:'I spend most money on '+mine.join(', ')+'.', by:S.student.name});
+  if(partner) WALL_SEED.push({w:partner, by:S.student.name+' reporting'});
+  buildWall(); award(5,'Pinned to the wall.'); complete(1);
+  $('#post-wall').disabled=true;
+});
+
+/* ---------- stop 2: word pool ---------- */
+function buildPool(){
+  const pool=$('#pool'); pool.innerHTML='';
+  POOL.forEach(x=>{
+    const b=document.createElement('button');
+    b.className='wordchip'+(x.w==='earn'?' star':'');
+    b.textContent=x.w;
+    b.onclick=()=>{
+      speak([x.w],'#d2');
+      if(!b.classList.contains('said')){
+        b.classList.add('said');
+        const n=$$('#pool .said').length; $('#poolcount').textContent=n;
+        if(n===10){ award(10,'All ten words practised!'); complete(2); }
+      }
+    };
+    pool.appendChild(b);
+  });
+}
+
+/* ---------- stop 3: matching + lend/borrow ---------- */
+function buildMatch(){
+  const L=$('#mL'), R=$('#mR'); L.innerHTML=''; R.innerHTML='';
+  let sel=null, hits=0;
+  POOL.forEach(x=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.textContent=x.w; b.dataset.k=x.w;
+    b.onclick=()=>{ $$('#mL .mitem').forEach(m=>m.classList.remove('sel')); b.classList.add('sel'); sel=b; };
+    L.appendChild(b);
+  });
+  shuffle([...POOL]).forEach(x=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.textContent=x.my; b.dataset.k=x.w;
+    b.onclick=()=>{
+      if(!sel){ toast('Tap an English word first.'); return; }
+      if(sel.dataset.k===b.dataset.k){
+        sel.classList.remove('sel'); sel.classList.add('ok'); b.classList.add('ok');
+        sel=null; hits++; award(3,'Betul!');
+        if(hits===POOL.length){ award(6,'All meanings matched!'); complete(3); }
+      } else {
+        b.classList.add('bad'); setTimeout(()=>b.classList.remove('bad'),450);
+        toast('Not that one. Try again.');
+      }
+    };
+    R.appendChild(b);
+  });
+}
+function buildLendQ(){
+  const box=$('#lendq');
+  const opts=[
+    {t:'You GIVE it to another person.', ok:true},
+    {t:'You TAKE it from another person.', ok:false}
+  ];
+  box.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.textContent=o.t;
+    b.onclick=()=>{
+      if(o.ok){ b.classList.add('ok'); award(5,'Correct — lend = give.'); }
+      else{ b.classList.add('bad'); setTimeout(()=>b.classList.remove('bad'),450); toast('That is BORROW, not lend.'); }
+      $('#lendtip').classList.add('on');
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- stop 4: gap fill ---------- */
+let gapState=[], picked=null, selBlank=null;
+function buildGaps(){
+  const t=$('#gaptext'); t.innerHTML=''; gapState=[];
+  let gi=0;
+  CLARE.forEach(part=>{
+    if(typeof part==='string'){ t.appendChild(document.createTextNode(part)); return; }
+    const i=gi++;
+    gapState.push({answer:part.a, filled:null});
+    const b=document.createElement('button');
+    b.className='blank'; b.dataset.i=i; b.textContent='('+(i+1)+') ______';
+    b.onclick=()=>{
+      const g=gapState[i];
+      if(g.filled){ g.filled=null; renderGap(i); refreshBank(); return; }
+      $$('.blank').forEach(x=>x.classList.remove('sel'));
+      if(picked){ g.filled=picked; picked=null; selBlank=null; renderGap(i); refreshBank(); }
+      else { b.classList.add('sel'); selBlank=i; }
+    };
+    t.appendChild(b);
+  });
+  refreshBank();
+}
+function renderGap(i){
+  const b=$('.blank[data-i="'+i+'"]'), g=gapState[i];
+  b.className='blank';
+  b.textContent = g.filled ? g.filled : '('+(i+1)+') ______';
+}
+function refreshBank(){
+  const bank=$('#bank'); bank.innerHTML='';
+  const used=gapState.map(g=>g.filled).filter(Boolean);
+  shuffle(POOL.map(p=>p.w)).forEach(w=>{
+    const b=document.createElement('button');
+    b.className='wordchip'+(used.includes(w)?' used':'')+(picked===w?' picked':'');
+    b.textContent=w;
+    b.onclick=()=>{
+      if(selBlank!==null && !gapState[selBlank].filled){
+        gapState[selBlank].filled=w; renderGap(selBlank); selBlank=null; picked=null; refreshBank();
+      } else { picked = picked===w ? null : w; refreshBank(); toast(picked?'Now tap a gap.':'Word released.'); }
+    };
+    bank.appendChild(b);
+  });
+}
+$('#clear-gaps').addEventListener('click',()=>{
+  gapState.forEach((g,i)=>{g.filled=null; renderGap(i);});
+  picked=null; selBlank=null; refreshBank();
+});
+$('#check-gaps').addEventListener('click',()=>{
+  let right=0;
+  gapState.forEach((g,i)=>{
+    const b=$('.blank[data-i="'+i+'"]');
+    if(!g.filled) return;
+    if(g.filled===g.answer){ b.classList.add('ok'); right++; } else b.classList.add('no');
+  });
+  S.gapScore=right;
+  $('#gapscore').textContent = right+' out of 10 correct.'+(right<10?' Fix the pink ones — tap a gap to take the word out.':' Perfect! Now listen and check at the next stop.');
+  award(right*4, right+'/10 gaps correct.');
+  if(right>=8) complete(4);
+});
+
+/* ---------- transcripts ---------- */
+function buildTranscripts(){
+  const c=$('#tr-clare');
+  c.innerHTML='<div class="eyebrow" style="margin-bottom:8px">Audio script · track 2</div>'+
+    CLARE_AUDIO.map((l,i)=>'<p data-l="'+i+'">'+l+'</p>').join('');
+  const t=$('#tr-int');
+  t.innerHTML='<div class="eyebrow" style="margin-bottom:8px">Audio script · track 3</div>'+
+    INTERVIEW.map((l,i)=>'<p data-l="'+i+'"><b>'+(l.v?'AIMAN':'INTERVIEWER')+':</b> '+l.t+'</p>').join('');
+}
+
+/* ---------- stop 5: who prefers to spend ---------- */
+function buildClareQ(){
+  const box=$('#clareq'); box.innerHTML='';
+  [['Clare',true],['Danny',false]].forEach(([n,ok])=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.textContent=n;
+    b.onclick=()=>{
+      if(ok){ b.classList.add('ok'); award(6,'Yes — Clare prefers to spend.'); complete(5); }
+      else { b.classList.add('bad'); setTimeout(()=>b.classList.remove('bad'),450); toast('Danny saves. Listen again from 0:20.'); }
+      $('#claretip').classList.add('on');
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- stop 6: think and compare ---------- */
+function buildThink(){
+  const box=$('#think'); box.innerHTML='<div class="eyebrow">Read carefully · answer on your own</div>';
+  THINK.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='row'; d.style.marginTop='14px';
+    d.innerHTML='<label class="lbl" for="th'+i+'">'+(i+1)+'. '+q+'</label>'+
+                '<textarea class="field" id="th'+i+'" rows="2" placeholder="Write in full sentences."></textarea>';
+    box.appendChild(d);
+  });
+  const btn=document.createElement('button');
+  btn.className='btn'; btn.style.marginTop='14px'; btn.textContent='Save my answers';
+  btn.onclick=()=>{
+    const done=THINK.filter((_,i)=>$('#th'+i).value.trim().length>3).length;
+    if(done<3){ toast('Answer all three questions in full sentences.'); return; }
+    award(9,'Three good answers.'); complete(6); btn.disabled=true;
+  };
+  box.appendChild(btn);
+}
+
+/* ---------- stop 7: note down ---------- */
+$('#check-note').addEventListener('click',()=>{
+  const v=$('#noteans').value.toLowerCase();
+  const fb=$('#notefb');
+  if(v.includes('guitar')){
+    fb.textContent='✅ Correct — he is saving for a used (second-hand) guitar.';
+    fb.style.color='var(--ink)'; award(8,'Good listening!'); complete(7);
+  } else if(!v.trim()){ fb.textContent='Type what you heard first.'; }
+  else { fb.textContent='Not quite. Listen again from “What do you do with the money?”'; fb.style.color='var(--hibiscus)'; }
+});
+
+/* ---------- stop 8: six sentences ---------- */
+const sixPick=Array(6).fill(null);
+function buildSix(){
+  const box=$('#six'); box.innerHTML='';
+  SIX.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='sent';
+    d.innerHTML='<span class="num">'+(i+1)+'</span>'+s.a;
+    s.o.forEach((o,j)=>{
+      const b=document.createElement('button');
+      b.className='opt'; b.textContent=o; b.dataset.i=i; b.dataset.j=j;
+      b.onclick=()=>{
+        sixPick[i]=j;
+        d.querySelectorAll('.opt').forEach(x=>x.classList.remove('chosen'));
+        b.classList.add('chosen');
+      };
+      d.appendChild(b);
+      if(j===0) d.appendChild(document.createTextNode(' / '));
+    });
+    d.appendChild(document.createTextNode(s.b));
+    box.appendChild(d);
+  });
+}
+$('#check-six').addEventListener('click',()=>{
+  if(sixPick.includes(null)){ toast('Choose a word in every sentence.'); return; }
+  let right=0;
+  SIX.forEach((s,i)=>{
+    const opts=$$('.opt[data-i="'+i+'"]');
+    opts.forEach(o=>o.classList.remove('chosen'));
+    opts[s.k].classList.add('ok');
+    if(sixPick[i]===s.k) right++; else opts[sixPick[i]].classList.add('no');
+  });
+  S.sixScore=right;
+  $('#sixscore').textContent=right+' out of 6 correct.';
+  $('#sixtip').classList.add('on');
+  award(right*5, right+'/6 sentences correct.');
+  if(right>=4) complete(8);
+});
+
+/* ---------- stop 9: post-lesson receipt ---------- */
+function buildBuys(){
+  const box=$('#buys'); box.innerHTML='<div class="eyebrow">Two most expensive things you ever bought</div>';
+  [1,2].forEach(n=>{
+    const d=document.createElement('div');
+    d.style.marginTop='14px';
+    d.innerHTML=
+      '<label class="lbl" for="thing'+n+'">'+n+'. What did you buy?</label>'+
+      '<input class="field" id="thing'+n+'" placeholder="e.g. a mountain bike">'+
+      '<div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">'+
+        '<input class="field" id="price'+n+'" style="max-width:150px" placeholder="RM …">'+
+        '<input class="field" id="why'+n+'" style="flex:1;min-width:180px" placeholder="Why did you buy it?">'+
+      '</div>';
+    box.appendChild(d);
+  });
+  const p=document.createElement('p');
+  p.style.cssText='margin:16px 0 12px;font-weight:700;font-size:.92rem;opacity:.8';
+  p.textContent='Your teacher will call some of you to describe your two things to the class. Be ready to say what it cost and why you bought it.';
+  box.appendChild(p);
+}
+$('#make-receipt').addEventListener('click',()=>{
+  const rows=[1,2].map(n=>({t:$('#thing'+n).value.trim(), p:$('#price'+n).value.trim(), w:$('#why'+n).value.trim()}));
+  if(rows.some(r=>!r.t)){ toast('Write both things before you print the receipt.'); return; }
+  const out=$('#receipt-out');
+  out.innerHTML='<div class="receipt"><h4>MY BIGGEST BUYS</h4>'+
+    '<div style="text-align:center;font-size:.72rem;opacity:.7">'+S.student.name.toUpperCase()+' · '+S.student.cls+'</div><br>'+
+    rows.map(r=>'<div class="li"><span>'+esc(r.t)+'</span><span>'+esc(r.p||'RM ?')+'</span></div>'+
+                '<div class="why">because '+esc(r.w||'…')+'</div>').join('')+
+    '<div class="li" style="border:none;font-weight:700;margin-top:8px"><span>TOTAL WORDS USED</span><span>10/10</span></div>'+
+    '<div style="text-align:center;margin-top:10px;font-size:.72rem">*** THANK YOU — NOW SAVE! ***</div></div>';
+  award(8,'Receipt printed.'); complete(9);
+});
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ---------- stop 10: results ---------- */
+function showResults(){
+  $('#finalamt').textContent='RM '+S.wallet;
+  $('#b1').style.width=(S.gapScore*10)+'%';
+  $('#b2').style.width=Math.round(S.sixScore/6*100)+'%';
+  const total=S.gapScore+S.sixScore;
+  const badge = total>=15 ? ['MONEY','MASTER','💎'] : total>=11 ? ['SMART','SAVER','🏆'] : total>=7 ? ['GOOD','START','⭐'] : ['KEEP','LISTENING','🎧'];
+  $('#badge').innerHTML='<div style="font-size:1.6rem">'+badge[2]+'</div><div>'+badge[0]+'<br>'+badge[1]+'</div>';
+  coinRain(20);
+}
+
+/* ---------- boot ---------- */
+function buildAll(){
+  buildTrail(); buildWall(); buildPool(); buildMatch(); buildLendQ();
+  buildGaps(); buildTranscripts(); buildClareQ(); buildThink(); buildSix(); buildBuys();
+}
+</script>
+</body>
+</html>
